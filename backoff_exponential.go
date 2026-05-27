@@ -2,8 +2,6 @@ package retry
 
 import (
 	"context"
-	"math"
-	"sync/atomic"
 	"time"
 )
 
@@ -15,7 +13,8 @@ type exponentialBackoff struct {
 // Exponential is a wrapper around Retry that uses an exponential backoff. See
 // NewExponential.
 func Exponential(ctx context.Context, base time.Duration, f RetryFunc) error {
-	return Do(ctx, NewExponential(base), f)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewExponential creates a new exponential backoff using the starting value of
@@ -25,23 +24,10 @@ func Exponential(ctx context.Context, base time.Duration, f RetryFunc) error {
 // for a 64-bit integer.
 //
 // It panics if the given base is less than zero.
-func NewExponential(base time.Duration) Backoff {
-	if base <= 0 {
-		panic("base must be greater than 0")
-	}
-
-	return &exponentialBackoff{
-		base: base,
-	}
-}
+func NewExponential(base time.Duration) Backoff { _ = "STUB: not implemented"; return *new(Backoff) }
 
 // Next implements Backoff. It is safe for concurrent use.
 func (b *exponentialBackoff) Next() (time.Duration, bool) {
-	next := b.base << (atomic.AddUint64(&b.attempt, 1) - 1)
-	if next <= 0 {
-		atomic.AddUint64(&b.attempt, ^uint64(0))
-		next = math.MaxInt64
-	}
-
-	return next, false
+	_ = "STUB: not implemented"
+	return *new(time.Duration), false
 }

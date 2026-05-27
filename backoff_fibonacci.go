@@ -2,8 +2,6 @@ package retry
 
 import (
 	"context"
-	"math"
-	"sync/atomic"
 	"time"
 	"unsafe"
 )
@@ -17,7 +15,8 @@ type fibonacciBackoff struct {
 // Fibonacci is a wrapper around Retry that uses a Fibonacci backoff. See
 // NewFibonacci.
 func Fibonacci(ctx context.Context, base time.Duration, f RetryFunc) error {
-	return Do(ctx, NewFibonacci(base), f)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewFibonacci creates a new Fibonacci backoff using the starting value of
@@ -28,29 +27,10 @@ func Fibonacci(ctx context.Context, base time.Duration, f RetryFunc) error {
 // for a 64-bit integer.
 //
 // It panics if the given base is less than zero.
-func NewFibonacci(base time.Duration) Backoff {
-	if base <= 0 {
-		panic("base must be greater than 0")
-	}
-
-	return &fibonacciBackoff{
-		state: unsafe.Pointer(&state{0, base}),
-	}
-}
+func NewFibonacci(base time.Duration) Backoff { _ = "STUB: not implemented"; return *new(Backoff) }
 
 // Next implements Backoff. It is safe for concurrent use.
 func (b *fibonacciBackoff) Next() (time.Duration, bool) {
-	for {
-		curr := atomic.LoadPointer(&b.state)
-		currState := (*state)(curr)
-		next := currState[0] + currState[1]
-
-		if next <= 0 {
-			return math.MaxInt64, false
-		}
-
-		if atomic.CompareAndSwapPointer(&b.state, curr, unsafe.Pointer(&state{currState[1], next})) {
-			return next, false
-		}
-	}
+	_ = "STUB: not implemented"
+	return *new(time.Duration), false
 }

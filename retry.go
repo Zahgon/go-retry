@@ -14,8 +14,6 @@ package retry
 
 import (
 	"context"
-	"errors"
-	"time"
 )
 
 // RetryFunc is a function passed to [Do].
@@ -29,67 +27,30 @@ type retryableError struct {
 }
 
 // RetryableError marks an error as retryable.
-func RetryableError(err error) error {
-	if err == nil {
-		return nil
-	}
-	return &retryableError{err}
-}
+func RetryableError(err error) error { _ = "STUB: not implemented"; return nil }
 
 // Unwrap implements error wrapping.
 func (e *retryableError) Unwrap() error {
-	return e.err
+	_ = "STUB: not implemented"
+
+	// Error returns the error string.
+	return nil
 }
 
-// Error returns the error string.
-func (e *retryableError) Error() string {
-	if e.err == nil {
-		return "retryable: <nil>"
-	}
-	return "retryable: " + e.err.Error()
-}
+func (e *retryableError) Error() string { _ = "STUB: not implemented"; return "" }
 
 func DoValue[T any](ctx context.Context, b Backoff, f RetryFuncValue[T]) (T, error) {
-	var nilT T
+	_ = "STUB: not implemented"
 
-	for {
-		// Return immediately if ctx is canceled
-		if err := context.Cause(ctx); err != nil {
-			return nilT, err
-		}
-
-		v, err := f(ctx)
-		if err == nil {
-			return v, nil
-		}
-
-		// Not retryable
-		var rerr *retryableError
-		if !errors.As(err, &rerr) {
-			return nilT, err
-		}
-
-		next, stop := b.Next()
-		if stop {
-			return nilT, rerr.Unwrap()
-		}
-
-		// Wait until next attempt or until the context expires. Any error will
-		// be caught at the top of the loop.
-		t := time.NewTimer(next)
-		select {
-		case <-ctx.Done():
-			t.Stop()
-		case <-t.C:
-		}
-	}
+	// Return immediately if ctx is canceled
+	return *new(T), nil
 }
+
+// Not retryable
+
+// Wait until next attempt or until the context expires. Any error will
+// be caught at the top of the loop.
 
 // Do wraps a function with a backoff to retry. The provided context is the same
 // context passed to the [RetryFunc].
-func Do(ctx context.Context, b Backoff, f RetryFunc) error {
-	_, err := DoValue(ctx, b, func(ctx context.Context) (*struct{}, error) {
-		return nil, f(ctx)
-	})
-	return err
-}
+func Do(ctx context.Context, b Backoff, f RetryFunc) error { _ = "STUB: not implemented"; return nil }
